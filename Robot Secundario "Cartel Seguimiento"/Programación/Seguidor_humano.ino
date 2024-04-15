@@ -1,4 +1,4 @@
-#include <NewPing.h>          
+#include <NewPing.h>           
 #include <Servo.h>             
 #include <AFMotor.h>           
 
@@ -25,8 +25,24 @@ int pos = 0;
 void setup() {
   Serial.begin(9600);   
   myservo.attach(10);   
-  stop();              
-}
+   {
+    for (pos = 90; pos <= 180; pos += 1) {  
+      myservo.write(pos);                   
+      delay(15);                          
+    }
+    for (pos = 180; pos >= 0; pos -= 1) {   
+      myservo.write(pos);                   
+      delay(15);                            
+    }
+    for (pos = 0; pos <= 90; pos += 1) {    
+      myservo.write(pos);                   
+      delay(15);                           
+    }
+  }
+  pinMode(RIGHT, INPUT); 
+  pinMode(LEFT, INPUT);  
+}              
+
 
 void loop() {
   delay(50); 
