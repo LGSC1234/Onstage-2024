@@ -1,50 +1,47 @@
-//Arduino Human Following Robot
 
-//include the library code:
 #include <NewPing.h>           
 #include <Servo.h>             
 #include <AFMotor.h>           
 
-#define LEFT A5             // Right IR sensor connected to analog pin A2 of Arduino Uno:
-#define RIGHT A1            // Left IR sensor connected to analog pin A3 of Arduino Uno:
-#define TRIGGER_PIN A2      // Trigger pin connected to analog pin A1 of Arduino Uno:
-#define ECHO_PIN A3         // Echo pin connected to analog pin A0 of Arduino Uno:
-#define MAX_DISTANCE 200    // Maximum ping distance:
+#define LEFT A5             
+#define RIGHT A1            
+#define TRIGGER_PIN A2      
+#define ECHO_PIN A3         
+#define MAX_DISTANCE 200    
 
-unsigned int distance = 0;    // Variable to store ultrasonic sensor distance:
-unsigned int Right_Value = 0; // Variable to store Right IR sensor value:
-unsigned int Left_Value = 0;  // Variable to store Left IR sensor value:
+unsigned int distance = 0;    
+unsigned int Right_Value = 0; 
+unsigned int Left_Value = 0;  
 int d = 10;
 
-NewPing sonar(TRIGGER_PIN, ECHO_PIN, MAX_DISTANCE);  // NewPing setup of pins and maximum distance:
+NewPing sonar(TRIGGER_PIN, ECHO_PIN, MAX_DISTANCE); 
 
 // Create motor objects for two motors
 AF_DCMotor Motor1(1, MOTOR12_1KHZ);
 AF_DCMotor Motor2(2, MOTOR12_1KHZ);
 
-Servo myservo; // Create servo object to control the servo:
-int pos = 0;   // Variable to store the servo position:
+Servo myservo; 
+int pos = 0;  
 
 void setup() {
-  Serial.begin(9600);   // Initialize serial communication at 9600 bits per second:
-  myservo.attach(10);    // Servo attached to pin 10 of Arduino UNO
-  stop();               // Stop motors initially
+  Serial.begin(9600);   
+  myservo.attach(10);   
+  stop();              
 }
 
 void loop() {
-  delay(50);                        // Wait 50ms between pings:
-  distance = sonar.ping_cm();       // Send ping, get distance in cm and store it in 'distance' variable:
+  delay(50); 
+  distance = sonar.ping_cm();       
   Serial.print("distance: ");
-  Serial.println(distance);         // Print the distance in serial monitor:
+  Serial.println(distance);        
 
-  Right_Value = digitalRead(RIGHT); // Read the value from Right IR sensor:
-  Left_Value = digitalRead(LEFT);   // Read the value from Left IR sensor:
+  Right_Value = digitalRead(RIGHT); 
+  Left_Value = digitalRead(LEFT);  
  
   Serial.print("RIGHT: ");
-  Serial.println(Right_Value);      // Print the right IR sensor value in serial monitor:
+  Serial.println(Right_Value);  
   Serial.print("LEFT: ");
-  Serial.println(Left_Value);       // Print the left IR sensor value in serial monitor:
-
+  Serial.println(Left_Value);    
   if (distance > 1 && distance < d) {
     // Move Forward:
     Motor1.setSpeed(130);
@@ -66,7 +63,7 @@ void loop() {
     Motor2.run(FORWARD);
     delay(150);
   } else {
-    stop(); // Stop motors if none of the above conditions are met
+    stop();
   }
 }
 
