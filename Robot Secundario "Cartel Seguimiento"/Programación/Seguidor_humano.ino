@@ -1,91 +1,92 @@
-#include <NewPing.h>           
-#include <Servo.h>             
-#include <AFMotor.h>           
+#include <NewPing.h>           // NewPing para sensor de ultrasonido
+#include <Servo.h>             // Librería Servo para el motor
+#include <AFMotor.h>           // Librería AFMotor para motores DC
 
-#define LEFT A5             
-#define RIGHT A4            
-#define TRIGGER_PIN A2      
-#define ECHO_PIN A3         
-#define MAX_DISTANCE 200    
+#define LEFT A5               // Pin A5 LEFT para el sensor en la izquierda
+#define RIGHT A4              // Pin A4 RIGHT para el sensor en derecha
+#define TRIGGER_PIN A2        // Pin A2 TRIGGER_PIN para  sensor de ultrasonido
+#define ECHO_PIN A3           // Pin A3 ECHO_PIN para el sensor de ultrasonido
+#define MAX_DISTANCE 200      // La distancia máxima para el sensor de ultrasonido
 
-unsigned int distance = 0;    
-unsigned int Right_Value = 0; 
-unsigned int Left_Value = 0;  
-int d = 15;
+unsigned int distance = 0;    // Variable para almacenar la distancia medida por el sensor de ultrasonido
+unsigned int Right_Value = 0; // Variable para almacenar el valor leído del sensor de línea derecha
+unsigned int Left_Value = 0;  // Variable para almacenar el valor leído del sensor de línea izquierda
+int d = 15;                    // Distancia de detección para activar el giro
 
-NewPing sonar(TRIGGER_PIN, ECHO_PIN, MAX_DISTANCE); 
+NewPing sonar(TRIGGER_PIN, ECHO_PIN, MAX_DISTANCE); // Instancia del sensor de ultrasonido
 
-// Create motor objects for two motors
+// Creación de objetos de motor para dos motores DC
 AF_DCMotor Motor1(1, MOTOR12_1KHZ);
 AF_DCMotor Motor2(2, MOTOR12_1KHZ);
 
-Servo myservo; 
-int pos = 0;  
+Servo myservo;  // Objeto servo para controlar el servo motor
+int pos = 0;    // Variable para almacenar la posición del servo motor
 
 void setup() {
   Serial.begin(9600);   
   myservo.attach(10);   
    {
-    for (pos = 90; pos <= 180; pos += 1) {  
-      myservo.write(pos);                   
-      delay(15);                          
+    for (pos = 90; pos <= 180; pos += 1) {  // De 90 a 180 grados
+      myservo.write(pos);                   // Posición deseada
+      delay(15);                            // espera 15 milisegundos
     }
-    for (pos = 180; pos >= 0; pos -= 1) {   
-      myservo.write(pos);                   
-      delay(15);                            
+    for (pos = 180; pos >= 0; pos -= 1) {   // De 180 a 0 grados
+      myservo.write(pos);                   // Posición deseada
+      delay(15);                            // espera 15 milisegundos
     }
-    for (pos = 0; pos <= 90; pos += 1) {    
-      myservo.write(pos);                   
-      delay(15);                           
+    for (pos = 0; pos <= 90; pos += 1) {    // De 0 a 90 grados
+      myservo.write(pos);                   // Posición deseada
+      delay(15);                            // espera 15 milisegundos
     }
   }
-  pinMode(RIGHT, INPUT); 
-  pinMode(LEFT, INPUT);  
-}              
-
+  pinMode(RIGHT, INPUT); // Pin Right como Entrada
+  pinMode(LEFT, INPUT);  // Pin Left como Entrada
+}    
 
 void loop() {
-  delay(50); 
-  distance = sonar.ping_cm();       
-  Serial.print("distance: ");
-  Serial.println(distance);        
+  delay(50); // Pausa entre para estabilizar las lecturas
 
-  Right_Value = digitalRead(RIGHT); 
-  Left_Value = digitalRead(LEFT);  
+  distance = sonar.ping_cm();       // Mide la distancia en centímetros con el sensor ultrasónico
+  Serial.print("distance: ");       // Imprime un mensaje para la distancia medida
+  Serial.println(distance);         // Imprime la distancia medida en el monitor serial
+
+  Right_Value = digitalRead(RIGHT); // Lee el valor del sensor de línea derecho
+  Left_Value = digitalRead(LEFT);   // Lee el valor del sensor de línea izquierdo
  
-  Serial.print("RIGHT: ");
-  Serial.println(Right_Value);  
-  Serial.print("LEFT: ");
-  Serial.println(Left_Value);    
+  Serial.print("RIGHT: ");          // Imprime un mensaje para el sensor de línea derecho
+  Serial.println(Right_Value);      // Imprime el valor del sensor de línea derecho
+  Serial.print("LEFT: ");           // Imprime un mensaje para el sensor de línea izquierdo
+  Serial.println(Left_Value);       // Imprime el valor del sensor de línea izquierdo
+
   if (distance > 1 && distance < d) {
-    // Move Forward:
-    Motor1.setSpeed(150);
-    Motor1.run(FORWARD);
-    Motor2.setSpeed(150);
-    Motor2.run(FORWARD);
+    // Avanzar si la distancia medida está dentro del rango deseado
+    Motor1.setSpeed(150);  // Establece la velocidad del motor 1
+    Motor1.run(FORWARD);   // Hace avanzar el motor 1 hacia adelante
+    Motor2.setSpeed(150);  // Establece la velocidad del motor 2
+    Motor2.run(FORWARD);   // Hace avanzar el motor 2 hacia adelante
   } else if (Right_Value == 1 && Left_Value == 0) {
-    // Turn right
-    Motor1.setSpeed(130);
-    Motor1.run(FORWARD);
-    Motor2.setSpeed(130);
-    Motor2.run(BACKWARD);
-    delay(150);
+    // Girar a la derecha si solo el sensor de línea derecho detecta la línea
+    Motor1.setSpeed(130);   // Establece una velocidad menor en el motor 1
+    Motor1.run(FORWARD);    // Hace avanzar el motor 1 hacia adelante
+    Motor2.setSpeed(130);   // Establece una velocidad menor en el motor 2
+    Motor2.run(BACKWARD);   // Hace retroceder el motor 2
+    delay(150);             // Espera para realizar el giro
   } else if (Right_Value == 0 && Left_Value == 1) {
-    // Turn left
-    Motor1.setSpeed(130);
-    Motor1.run(BACKWARD);
-    Motor2.setSpeed(130);
-    Motor2.run(FORWARD);
-    delay(150);
+    // Girar a la izquierda si solo el sensor de línea izquierdo detecta la línea
+    Motor1.setSpeed(130);   // Establece una velocidad menor en el motor 1
+    Motor1.run(BACKWARD);   // Hace retroceder el motor 1
+    Motor2.setSpeed(130);   // Establece una velocidad menor en el motor 2
+    Motor2.run(FORWARD);    // Hace avanzar el motor 2 hacia adelante
+    delay(150);             // Espera para realizar el giro
   } else {
-    stop();
+    stop();  // Detiene ambos motores si no se cumple ninguna condición de movimiento
   }
 }
 
 void stop() {
-  // Stop both motors
-  Motor1.setSpeed(0);
-  Motor1.run(RELEASE);
-  Motor2.setSpeed(0);
-  Motor2.run(RELEASE);
+  // Detiene ambos motores
+  Motor1.setSpeed(0);    // Establece la velocidad del motor 1 en 0
+  Motor1.run(RELEASE);   // Detiene el motor 1
+  Motor2.setSpeed(0);    // Establece la velocidad del motor 2 en 0
+  Motor2.run(RELEASE);   // Detiene el motor 2
 }
