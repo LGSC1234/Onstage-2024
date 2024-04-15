@@ -1,4 +1,4 @@
-#include <LiquidCrystal_I2C.h> // Librería LCD mediante I2C
+#include <LiquidCrystal_I2C.h> 
 #include <SoftwareSerial.h> // Librería comunicación serial 
 #include <MD_MAX72xx.h> // Librería matrices LED MAX7219/7221
 
