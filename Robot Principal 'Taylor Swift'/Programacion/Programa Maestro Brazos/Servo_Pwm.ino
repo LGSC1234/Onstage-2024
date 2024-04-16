@@ -60,9 +60,11 @@ void loop() {
         lcd.print("Activado");
         lcd.setCursor(0, 1);
         lcd.print("Estatus: ");
+        BT1.write("1");
       } else {
         lcd.clear();
         lcd.print("Desactivado");
+        BT1.write("2");
       }
       delay(1000); // Evitar múltiples lecturas mientras la tarjeta está presente
     }
@@ -96,6 +98,7 @@ void handleGesture() {
         setServo(3,0);  // Derecha abajo
         lcd.setCursor(0,1);
         lcd.print("Estatus: Arriba ");
+        BT1.write("6");
         break;
       case DIR_DOWN:  // Gesto: Abajo -> Configura servos para mirar hacia abajo
         setServo(0,180);
@@ -104,6 +107,7 @@ void handleGesture() {
         setServo(3,0);
         lcd.setCursor(0,1);
         lcd.print("Estatus: Abajo ");
+        BT1.write("3");
         break;
       case DIR_LEFT: // Gesto: Izquierda -> Configura servos para mirar hacia la izquierda
         setServo(1, 0);
@@ -113,6 +117,7 @@ void handleGesture() {
         setServo(3,135);
         lcd.setCursor(0,1);
         lcd.print("Estatus: Izquierda ");
+        BT1.write("4");
         break;
       case DIR_RIGHT: // Gesto: Derecha -> Configura servos para mirar hacia la derecha
         setServo(0,180);
@@ -121,6 +126,7 @@ void handleGesture() {
         setServo(3,90);
         lcd.setCursor(0,1);
         lcd.print("Estatus: Derecha ");
+        BT1.write("5");
         break;
       case DIR_NEAR:
         lcd.setCursor(0,1);
