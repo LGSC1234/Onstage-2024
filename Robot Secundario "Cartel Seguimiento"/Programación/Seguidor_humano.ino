@@ -2,16 +2,16 @@
 #include <Servo.h>             // Librería Servo para el motor
 #include <AFMotor.h>           // Librería AFMotor para motores DC
 
-#define LEFT A5               // Pin A5 LEFT para el sensor en la izquierda
-#define RIGHT A4              // Pin A4 RIGHT para el sensor en derecha
-#define TRIGGER_PIN A2        // Pin A2 TRIGGER_PIN para  sensor de ultrasonido
-#define ECHO_PIN A3           // Pin A3 ECHO_PIN para el sensor de ultrasonido
+#define LEFT A4               // Pin A4 LEFT para el sensor en la izquierda
+#define RIGHT A5             // Pin A5 RIGHT para el sensor en derecha
+#define TRIGGER_PIN A3        // Pin A2 TRIGGER_PIN para  sensor de ultrasonido
+#define ECHO_PIN A2           // Pin A3 ECHO_PIN para el sensor de ultrasonido
 #define MAX_DISTANCE 200      // La distancia máxima para el sensor de ultrasonido
 
 unsigned int distance = 0;    // Variable para almacenar la distancia medida por el sensor de ultrasonido
 unsigned int Right_Value = 0; // Variable para almacenar el valor leído del sensor de línea derecha
 unsigned int Left_Value = 0;  // Variable para almacenar el valor leído del sensor de línea izquierda
-int d = 15;                    // Distancia de detección para activar el giro
+int d = 30;                    // Distancia de detección para activar el giro
 
 NewPing sonar(TRIGGER_PIN, ECHO_PIN, MAX_DISTANCE); // Instancia del sensor de ultrasonido
 
@@ -66,16 +66,16 @@ void loop() {
     Motor2.run(FORWARD);   // Hace avanzar el motor 2 hacia adelante
   } else if (Right_Value == 1 && Left_Value == 0) {
     // Girar a la derecha si solo el sensor de línea derecho detecta la línea
-    Motor1.setSpeed(130);   // Establece una velocidad menor en el motor 1
+    Motor1.setSpeed(150);   // Establece una velocidad menor en el motor 1
     Motor1.run(FORWARD);    // Hace avanzar el motor 1 hacia adelante
-    Motor2.setSpeed(130);   // Establece una velocidad menor en el motor 2
+    Motor2.setSpeed(150);   // Establece una velocidad menor en el motor 2
     Motor2.run(BACKWARD);   // Hace retroceder el motor 2
     delay(150);             // Espera para realizar el giro
   } else if (Right_Value == 0 && Left_Value == 1) {
     // Girar a la izquierda si solo el sensor de línea izquierdo detecta la línea
-    Motor1.setSpeed(130);   // Establece una velocidad menor en el motor 1
+    Motor1.setSpeed(150);   // Establece una velocidad menor en el motor 1
     Motor1.run(BACKWARD);   // Hace retroceder el motor 1
-    Motor2.setSpeed(130);   // Establece una velocidad menor en el motor 2
+    Motor2.setSpeed(150);   // Establece una velocidad menor en el motor 2
     Motor2.run(FORWARD);    // Hace avanzar el motor 2 hacia adelante
     delay(150);             // Espera para realizar el giro
   } else {
