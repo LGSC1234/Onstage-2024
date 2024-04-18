@@ -1,9 +1,11 @@
+#include <SoftwareSerial.h>
 #include <Adafruit_PWMServoDriver.h>  // Librería para controlar el driver de servo PCA9685
 #include <SPI.h>                      // Librería SPI para la comunicación SPI
 #include <MFRC522.h>                  // Librería para el lector RFID MFRC522
 #include <Wire.h>                     // Comunicación I2C
 #include <LiquidCrystal_I2C.h>        // Controlar LCD mediante I2C
 #include <SparkFun_APDS9960.h>        // Sensor de gestos APDS9960
+
 
 #define SS_PIN 10                      // Pin para el SS del MFRC522
 #define RST_PIN 9                      // Pin para el RST del MFRC522
@@ -15,7 +17,7 @@
 MFRC522 mfrc522(SS_PIN, RST_PIN);      // Objeto lector RFID MFRC522
 LiquidCrystal_I2C lcd(LCD_ADDRESS, LCD_COLUMNS, LCD_ROWS);  // Objeto LCD mediante I2C
 SparkFun_APDS9960 apds;                 // Objeto ensor de gestos APDS9960
-
+SoftwareSerial BT1(6, 7); // RX, TX para la comunicación Bluetooth con el esclavo
 Adafruit_PWMServoDriver servos = Adafruit_PWMServoDriver(0x40); // Driver PCA9685 para control de servos
 
 byte Usuario1[4] = {0xA3, 0xE4, 0x05, 0xAC}; // UID de la tarjeta RFID autorizada
