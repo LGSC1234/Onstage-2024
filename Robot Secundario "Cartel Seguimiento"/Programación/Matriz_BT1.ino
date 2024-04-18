@@ -10,6 +10,7 @@
 #define CLK_PIN   13 // Pin de CLK
 #define DATA_PIN  11 // Pin de DATA 
 #define CS_PIN    10 // Pin de CS
+#define RELAY_PIN 2  // Pin para controlar el relé
 
 SoftwareSerial BT1(6, 7); //Comunicación serial
 LiquidCrystal_I2C lcd(LCD_ADDRESS, LCD_COLUMNS, LCD_ROWS); // Configura LCD
@@ -29,6 +30,7 @@ void setup() {
   cartel.begin(); // Inicializa las matrices LED
   cartel.control(MD_MAX72XX::INTENSITY, 10); // Configura la intensidad de brillo de las matrices LED
   cartel.control( MD_MAX72XX::UPDATE, false ); // Desactiva la actualización automática de las matrices LED
+  pinMode(RELAY_PIN, OUTPUT);  // Configurar el pin del relé como salida
   Serial.println("Listo para recibir mensajes."); // Imprime un mensaje en el puerto serial
 }
 
@@ -116,10 +118,12 @@ void loop() {
       lcd.print("Activado"); // Muestra un mensaje en el LCD
       lcd.setCursor(0, 1); // Establece el cursor en la segunda fila del LCD
       lcd.print("Estatus: "); // Muestra un mensaje en la segunda fila del LCD
+      digitalWrite(RELAY_PIN, HIGH); // Activar el relé
     }
     else if (receivedChar == '2') { // Si se recibe el carácter '2'
       lcd.clear(); // Limpia el contenido del LCD
       lcd.print("Desactivado"); // Muestra un mensaje en el LCD
+      digitalWrite(RELAY_PIN, LOW); // Activar el relé
     }
     else if (receivedChar == '3') { // Si se recibe el carácter '3'
       lcd.clear(); // Limpia el contenido del LCD
